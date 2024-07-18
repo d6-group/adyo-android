@@ -1,14 +1,16 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion "26.0.2"
+    namespace "za.co.adyo.android"
+
+    compileSdkVersion 34
+
     defaultConfig {
-        applicationId "za.co.adyo.adyo.android"
-        minSdkVersion 19
-        targetSdkVersion 26
-        versionCode 2
-        versionName "1.1.7.18"
+        applicationId "za.co.adyo.android"
+        minSdkVersion 21
+        targetSdkVersion 34
+        versionCode 3
+        versionName "1.1.7.22"
     }
     buildTypes {
         release {
@@ -23,8 +25,8 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:26.1.0'
-    compile project(':adyoandroidsdk')
-    compile 'com.android.support:design:26.1.0'
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation project(':adyoandroidsdk')
+    implementation 'com.google.android.material:material:1.12.0'
 }
 

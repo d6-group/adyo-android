@@ -1,14 +1,15 @@
-package za.co.adyo.adyo.android;
+package za.co.adyo.android;
 
 import android.content.pm.ApplicationInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.design.widget.BottomSheetDialogFragment;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.Button;
+
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import za.co.adyo.android.listeners.PlacementRequestListener;
 import za.co.adyo.android.models.Placement;
