@@ -4,13 +4,17 @@ plugins {
 }
 
 version = "1.1.7.22"
+group = "za.co.adyo.android"                                        // Maven Group ID for the artifact
 
 android {
     namespace "za.co.adyo.android"
 
-    compileSdkVersion 34
-
     defaultConfig {
+        aarMetadata {
+            minCompileSdk = 21
+        }
+
+        compileSdk 34
         minSdkVersion 21
         targetSdkVersion 34
         versionCode 3
@@ -35,9 +39,28 @@ android {
     lintOptions {
         abortOnError false
     }
+
+    publishing {
+        singleVariant('release') {
+            withSourcesJar()
+        }
+    }
 }
 
-group = "za.co.adyo"                                        // Maven Group ID for the artifact
+publishing {
+    publications {
+        // Creates a Maven publication called "release".
+        release(MavenPublication) {
+            groupId = group
+            artifactId = 'adyo-android'
+            version = version
+
+            afterEvaluate {
+                from components.release
+            }
+        }
+    }
+}
 
 dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
@@ -48,20 +71,7 @@ dependencies {
 
 }
 
-afterEvaluate {
-    publishing {
-        publications {
-            // Creates a Maven publication called "release".
-            release(MavenPublication) {
-                from components.findByName('release')
 
-                groupId = group
-                artifactId = 'adyo-android'
-                version = version
-            }
-        }
-    }
-}
 //
 //task sourcesJar(type: Jar) {
 //    from android.sourceSets.main.java.srcDirs

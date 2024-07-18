@@ -3,10 +3,9 @@ apply plugin: 'com.android.application'
 android {
     namespace "za.co.adyo.android.sample"
 
-    compileSdkVersion 34
-
     defaultConfig {
         applicationId "za.co.adyo.android"
+        compileSdk 34
         minSdkVersion 21
         targetSdkVersion 34
         versionCode 3
