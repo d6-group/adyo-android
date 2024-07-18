@@ -2,6 +2,7 @@ package za.co.adyo.android.views;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -105,7 +106,21 @@ public class AdyoZoneView extends FrameLayout {
         init();
     }
 
+    private Activity getActivity(Context context) {
+        while (context instanceof ContextWrapper) {
+            if (context instanceof Activity) {
+                return (Activity)context;
+            }
+            context = ((ContextWrapper)context).getBaseContext();
+        }
+        return null;
+    }
+
+
     private void init() {
+
+        context = getActivity(context);
+
         try {
             SharedPreferences sharedpreferences = context.getSharedPreferences("ADYO", Context.MODE_PRIVATE);
             if (sharedpreferences.getString("user_id", "").equals(""))
@@ -221,7 +236,7 @@ public class AdyoZoneView extends FrameLayout {
             requestRunnable = new RequestRunnable(context, params, placementRequestListener) {
                 @Override
                 public void run() {
-                    requestPlacement((Activity) context, this.params, this.listener);
+                    requestPlacement(activity, this.params, this.listener);
                 }
             };
 
@@ -524,15 +539,8 @@ public class AdyoZoneView extends FrameLayout {
         //Save the width and height to be used as parameters for the getPlacement request with non
         //are specified
 
-        final WindowManager w = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        final Display d = w.getDefaultDisplay();
-        final DisplayMetrics m = new DisplayMetrics();
-        d.getMetrics(m);
-
-        int density = (m.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
-
-        width = convertPixelsToDp(MeasureSpec.getSize(widthMeasureSpec), context) * density;
-        height = convertPixelsToDp(MeasureSpec.getSize(heightMeasureSpec), context) * density;
+        width = convertPixelsToDp(MeasureSpec.getSize(widthMeasureSpec), context);
+        height = convertPixelsToDp(MeasureSpec.getSize(heightMeasureSpec), context);
 
 //        width = MeasureSpec.getSize(widthMeasureSpec)  ;
 //        height = MeasureSpec.getSize(heightMeasureSpec);
@@ -558,7 +566,9 @@ public class AdyoZoneView extends FrameLayout {
         final DisplayMetrics m = new DisplayMetrics();
         d.getMetrics(m);
 
-        return px / (m.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
+        float density = m.density;
+
+        return (int) (px * density);
     }
 
 

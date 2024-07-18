@@ -87,7 +87,7 @@ public class AdyoPopupView extends DialogFragment {
 //            webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 //        }
 
-      //  webView.setInitialScale(1);
+        //  webView.setInitialScale(1);
 
 //        webView.setWebViewClient(new WebViewClient() {
 //

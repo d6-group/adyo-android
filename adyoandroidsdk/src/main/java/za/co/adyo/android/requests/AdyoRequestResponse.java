@@ -54,7 +54,7 @@ public class AdyoRequestResponse {
                     jsonObject.has("width") ? jsonObject.getInt("width") : 0,
                     jsonObject.has("height") ? jsonObject.getInt("height") : 0,
                     jsonObject.has("matched_keywords") && !jsonObject.isNull("matched_keywords") ? jsonObject.getJSONArray("matched_keywords") : null
-                    );
+            );
 
             placementList.add(placement);
 

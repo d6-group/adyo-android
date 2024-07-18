@@ -8,7 +8,7 @@ package za.co.adyo.android.listeners;
  * @version 1.0, 11/13/17
  */
 public interface ImpressionRequestListener {
-    
+
     void onRequestComplete(Integer impressionCode, Integer thirdPartyCode);
 
     void onRequestError(String impressionError, String thirdPartyImpressionError);

@@ -10,7 +10,7 @@ import za.co.adyo.android.models.Placement;
  * @version 1.0, 11/13/17
  */
 public interface PlacementRequestListener {
-    
+
     void onRequestComplete(boolean isFound, Placement placement);
 
     void onRequestError(String error);

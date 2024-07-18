@@ -204,7 +204,7 @@ public class Adyo {
             }
             else if(placement.getAppTarget() == Placement.APP_TARGET_POPUP) {
 
-               Adyo.showAlertDialog(activity.getFragmentManager(), placement.getClickUrl(), activity);
+                Adyo.showAlertDialog(activity.getFragmentManager(), placement.getClickUrl(), activity);
 
             }
             else
