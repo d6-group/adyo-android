@@ -62,15 +62,15 @@ afterEvaluate {
         }
     }
 }
-
-task sourcesJar(type: Jar) {
-    from android.sourceSets.main.java.srcDirs
-    archiveClassifier = 'sources'
-}
-
-artifacts {
-    archives sourcesJar
-}
+//
+//task sourcesJar(type: Jar) {
+//    from android.sourceSets.main.java.srcDirs
+//    archiveClassifier = 'sources'
+//}
+//
+//artifacts {
+//    archives sourcesJar
+//}
 
 Properties properties = new Properties()
 properties.load(project.rootProject.file('local.properties').newDataInputStream())
