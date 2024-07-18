@@ -15,7 +15,7 @@
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
         android:gravity="center_horizontal"
-        tools:context=".FilterActivity">
+        tools:context=".sample.FilterActivity">
 
         <za.co.adyo.android.views.AdyoZoneView
             android:id="@+id/adyo_zone_view"

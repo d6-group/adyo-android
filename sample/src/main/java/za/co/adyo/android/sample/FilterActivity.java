@@ -1,4 +1,4 @@
-package za.co.adyo.android;
+package za.co.adyo.android.sample;
 
 import android.content.pm.ApplicationInfo;
 import android.content.res.Configuration;

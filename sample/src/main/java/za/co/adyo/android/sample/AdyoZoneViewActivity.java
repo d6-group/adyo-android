@@ -1,4 +1,4 @@
-package za.co.adyo.android;
+package za.co.adyo.android.sample;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;

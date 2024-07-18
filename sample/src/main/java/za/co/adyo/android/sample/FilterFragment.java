@@ -1,4 +1,4 @@
-package za.co.adyo.android;
+package za.co.adyo.android.sample;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -29,7 +29,6 @@ import org.json.JSONObject;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-
 
 import za.co.adyo.android.requests.PlacementRequestParams;
 
