@@ -1,5 +1,7 @@
-apply plugin: 'com.android.library'
-apply plugin: 'com.jfrog.bintray'
+plugins {
+    id 'com.android.library'
+    id 'maven-publish'
+}
 
 version = "1.1.7.22"
 
@@ -35,46 +37,7 @@ android {
     }
 }
 
-def siteUrl = 'https://github.com/d6-group/adyo-android'      // Homepage URL of the library
-def gitUrl = 'https://github.com/d6-group/adyo-android.git'   // Git repository URL
 group = "za.co.adyo"                                        // Maven Group ID for the artifact
-
-//install {
-//    repositories.mavenInstaller {
-//
-//        // This generates POM.xml with proper parameters
-//        pom {
-//            project {
-//                packaging 'aar'
-//
-//                // Add your description here
-//                name 'Adyo Android SDK'
-//                url siteUrl
-//
-//                // Set your license
-//                licenses {
-//                    license {
-//                        name 'MIT'
-//                    }
-//                }
-//                developers {
-//                    developer {
-//                        id 'marilie.moolman'
-//                        name 'marilie'
-//                        email 'marilie@unitx.co.za'
-//                    }
-//                }
-//                scm {
-//                    connection gitUrl
-//                    developerConnection gitUrl
-//                    url siteUrl
-//
-//                }
-//            }
-//        }
-//    }
-//}
-
 
 dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
@@ -85,32 +48,29 @@ dependencies {
 
 }
 
+afterEvaluate {
+    publishing {
+        publications {
+            // Creates a Maven publication called "release".
+            release(MavenPublication) {
+                from components.findByName('release')
+
+                groupId = group
+                artifactId = 'adyo-android'
+                version = version
+            }
+        }
+    }
+}
 
 task sourcesJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
     archiveClassifier = 'sources'
 }
 
-
 artifacts {
     archives sourcesJar
 }
 
-
 Properties properties = new Properties()
 properties.load(project.rootProject.file('local.properties').newDataInputStream())
-
-bintray {
-    user = properties.getProperty("bintray.user")
-    key = properties.getProperty("bintray.apikey")
-
-    configurations = ['archives']
-    pkg {
-        repo = "adyo-android-sdk"
-        name = "adyo-android-sdk"
-        websiteUrl = siteUrl
-        vcsUrl = gitUrl
-        licenses = ["MIT"]
-        publish = true
-    }
-}

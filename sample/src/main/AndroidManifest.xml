@@ -8,6 +8,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+        <!-- DEMO APP ID, replace with own app id -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-3940256099942544~3347511713"/>
