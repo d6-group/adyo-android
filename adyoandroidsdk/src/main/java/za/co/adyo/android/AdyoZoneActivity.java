@@ -6,6 +6,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.CookieManager;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -42,7 +43,9 @@ public class AdyoZoneActivity extends AppCompatActivity {
         settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
         settings.setCacheMode(WebSettings.LOAD_NO_CACHE);
         settings.setDomStorageEnabled(true);
-
+        CookieManager.getInstance().setAcceptThirdPartyCookies(webView, true);
+        settings.setDomStorageEnabled(true);
+        // settings.setMediaPlaybackRequiresUserGesture(false);
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {

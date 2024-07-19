@@ -19,6 +19,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
@@ -349,6 +350,10 @@ public class AdyoZoneView extends FrameLayout {
                     "</body></html>";
 
 
+            CookieManager.getInstance().setAcceptThirdPartyCookies(webView, true);
+            webView.getSettings().setJavaScriptEnabled(true);
+            webView.getSettings().setDomStorageEnabled(true);
+            // webView.getSettings().setMediaPlaybackRequiresUserGesture(false);
 
             webView.loadData(url, "text/html; charset=UTF-8", null);
 
@@ -371,9 +376,13 @@ public class AdyoZoneView extends FrameLayout {
                     "</body></html>";
 
             //The AdyoZone becomes a WebView to handle Rich Media
-            webView.getSettings().setJavaScriptEnabled(true);
             webView.getSettings().setLoadWithOverviewMode(true);
             webView.getSettings().setUseWideViewPort(true);
+            CookieManager.getInstance().setAcceptThirdPartyCookies(webView, true);
+            webView.getSettings().setJavaScriptEnabled(true);
+            webView.getSettings().setDomStorageEnabled(true);
+            // webView.getSettings().setMediaPlaybackRequiresUserGesture(false);
+
             webView.setVerticalScrollBarEnabled(false);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -409,11 +418,14 @@ public class AdyoZoneView extends FrameLayout {
                     "</div>" +
                     "</body></html>";
 
-            webView.getSettings().setJavaScriptEnabled(true);
             webView.setInitialScale(1);
             webView.getSettings().setLoadWithOverviewMode(true);
             webView.getSettings().setUseWideViewPort(true);
             webView.setVerticalScrollBarEnabled(false);
+            CookieManager.getInstance().setAcceptThirdPartyCookies(webView, true);
+            webView.getSettings().setJavaScriptEnabled(true);
+            webView.getSettings().setDomStorageEnabled(true);
+            // webView.getSettings().setMediaPlaybackRequiresUserGesture(false);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 setLayerType(View.LAYER_TYPE_HARDWARE, null);
@@ -444,6 +456,10 @@ public class AdyoZoneView extends FrameLayout {
         webView.setVerticalScrollBarEnabled(false);
         webView.setHorizontalScrollBarEnabled(false);
         webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+        CookieManager.getInstance().setAcceptThirdPartyCookies(webView, true);
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.getSettings().setDomStorageEnabled(true);
+        // webView.getSettings().setMediaPlaybackRequiresUserGesture(false);
         webView.setWebChromeClient(new WebChromeClient() {
             @Override
             public boolean onCreateWindow(WebView view, boolean dialog, boolean userGesture, android.os.Message resultMsg)
