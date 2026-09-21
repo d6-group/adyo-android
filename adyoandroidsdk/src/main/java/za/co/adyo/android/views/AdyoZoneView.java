@@ -75,7 +75,7 @@ public class AdyoZoneView extends FrameLayout {
 
     private String id;
 
-    private static volatile boolean creativeScalingEnabled = false;
+    private boolean creativeScalingEnabled = false;
     private static String cachedScalingScript = null;
 
     /**
@@ -83,7 +83,7 @@ public class AdyoZoneView extends FrameLayout {
      * that scales the creative to fill the slot width. Default off so other SDK consumers are
      * unaffected. Presentation only — does not change requests, impressions or clicks.
      */
-    public static void setCreativeScalingEnabled(boolean enabled) {
+    public void setCreativeScalingEnabled(boolean enabled) {
         creativeScalingEnabled = enabled;
     }
 
