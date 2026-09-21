@@ -26,14 +26,21 @@ import android.webkit.WebView;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
+import androidx.webkit.WebViewCompat;
+import androidx.webkit.WebViewFeature;
+
 import com.google.android.gms.ads.identifier.AdvertisingIdClient;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Collections;
 import java.util.Random;
 import java.util.UUID;
 
+import za.co.adyo.android.R;
 import za.co.adyo.android.helpers.Adyo;
 import za.co.adyo.android.helpers.AdyoWebViewClient;
 import za.co.adyo.android.helpers.RequestRunnable;
@@ -67,6 +74,43 @@ public class AdyoZoneView extends FrameLayout {
     private PlacementRequestParams[] availableParams = new PlacementRequestParams[]{};
 
     private String id;
+
+    private static volatile boolean creativeScalingEnabled = false;
+    private static String cachedScalingScript = null;
+
+    /**
+     * Opt-in: when enabled, a document-start script is injected into each creative's WebView
+     * that scales the creative to fill the slot width. Default off so other SDK consumers are
+     * unaffected. Presentation only — does not change requests, impressions or clicks.
+     */
+    public static void setCreativeScalingEnabled(boolean enabled) {
+        creativeScalingEnabled = enabled;
+    }
+
+    private static String getScalingScript(Context context) {
+        if (cachedScalingScript != null) {
+            return cachedScalingScript;
+        }
+        InputStream is = null;
+        try {
+            is = context.getResources().openRawResource(R.raw.adyo_creative_scaling);
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            byte[] buf = new byte[4096];
+            int n;
+            while ((n = is.read(buf)) != -1) {
+                bos.write(buf, 0, n);
+            }
+            cachedScalingScript = bos.toString("UTF-8");
+        } catch (IOException e) {
+            cachedScalingScript = null;
+        } finally {
+            if (is != null) {
+                try { is.close(); } catch (IOException ignored) { }
+            }
+        }
+        return cachedScalingScript;
+    }
+
     private AdyoZoneViewListener listener = new AdyoZoneViewListener() {
         @Override
         public boolean shouldRecordImpression(Placement placement) {
@@ -313,6 +357,20 @@ public class AdyoZoneView extends FrameLayout {
         addView(webView);
 
         webView.setBackgroundColor(Color.TRANSPARENT);
+
+        if (creativeScalingEnabled
+                && WebViewFeature.isFeatureSupported(WebViewFeature.DOCUMENT_START_SCRIPT)) {
+            String scalingScript = getScalingScript(getContext());
+            if (scalingScript != null) {
+                // "*" matches opaque origins too: image creatives load via loadData(..., null),
+                // which host-based rules silently miss.
+                WebViewCompat.addDocumentStartJavaScript(
+                        webView, scalingScript, Collections.singleton("*"));
+            }
+            // Keep the scaled creative from being dragged/zoomed inside its frame (handoff item c).
+            webView.getSettings().setBuiltInZoomControls(false);
+            webView.getSettings().setSupportZoom(false);
+        }
 
         if (currentPlacement.getCreativeType() == Placement.CREATIVE_TYPE_IMAGE) {
 
