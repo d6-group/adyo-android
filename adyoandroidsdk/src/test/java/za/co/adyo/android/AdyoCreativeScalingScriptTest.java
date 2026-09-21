@@ -38,10 +38,11 @@ public class AdyoCreativeScalingScriptTest {
             "  images:__images, body:{}," +
             "  getElementsByTagName:function(t){return t==='iframe'?__iframes:[];}," +
             "  addEventListener:function(t,fn){this.__h[t]=fn;}};\n" +
+            "function MutationObserver(cb){this.observe=function(){};}\n" +
+            "function setTimeout(fn,ms){}\n" +
             "var window={innerWidth:" + innerWidth + ",__h:{}," +
             "  addEventListener:function(t,fn){this.__h[t]=fn;}," +
-            "  MutationObserver:function(cb){this.observe=function(){};}};\n" +
-            "function setTimeout(fn,ms){}\n";
+            "  MutationObserver:MutationObserver};\n";
         String fire =
             "\n;document.__h['DOMContentLoaded'] && document.__h['DOMContentLoaded']();\n" +
             "(function(){var el=(__images.length?__images[0]:(__iframes.length?__iframes[0]:null));" +
