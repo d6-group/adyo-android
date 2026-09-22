@@ -457,7 +457,7 @@ public class AdyoZoneView extends FrameLayout {
             String url = "<!DOCTYPE html>" +
                     "<html>" +
                     "<head>" +
-                    "<meta name=\"viewport\" content=\"initial-scale=1.0\"/>" +
+                    "<meta name=\"viewport\" content=\"width=" + currentPlacement.getWidth() + "\"/>" +
                     "<meta charset=\"UTF-8\">" +
                     "<style type=\"text/css\">" +
                     "html{margin:0; padding:0; height:100%}" +
@@ -468,12 +468,8 @@ public class AdyoZoneView extends FrameLayout {
                     currentPlacement.getCreativeHtml() +
                     "</body></html>";
 
-            int creativeWidthDp = currentPlacement.getWidth();
-            int tagScalePercent = (creativeWidthDp > 0 && width > 0)
-                    ? Math.max(1, (int) Math.round(width * 100.0 / creativeWidthDp))
-                    : 100;
-            webView.setInitialScale(tagScalePercent);
-            webView.getSettings().setLoadWithOverviewMode(false);
+            webView.setInitialScale(0); // let the WebView fit the (creative-width) viewport to the slot
+            webView.getSettings().setLoadWithOverviewMode(true);
             webView.getSettings().setUseWideViewPort(true);
             webView.setVerticalScrollBarEnabled(false);
             CookieManager.getInstance().setAcceptThirdPartyCookies(webView, true);
