@@ -84,8 +84,9 @@
         }
 
         // Only plain <img> creatives are scaled. Scaling a tag/iframe creative — restyling its
-        // host body or transforming the iframe — blanks it on the Android WebView (see the note
-        // on `applyFittingLayout`). A tag creative is left untouched and simply revealed.
+        // host body or transforming/zooming the iframe — either blanks it (transform, flex) or
+        // clips it (bare zoom) on the Android WebView. Tag creatives are filled natively in
+        // AdyoZoneView (setInitialScale), so the script leaves them untouched.
         if (el.tagName === 'IMG') {
             var scale = window.innerWidth / el.offsetWidth;
             if (scale > 1.01 && scale <= MAX_UPSCALE) {
@@ -93,8 +94,6 @@
                 el.style.transformOrigin = 'center center';
                 el.style.transform = 'scale(' + scale.toFixed(4) + ')';
             } else {
-                // Already filling it, or too few pixels to survive being blown up: a centred
-                // small creative beats a blurry full-width one.
                 removeFittingLayout();
                 el.style.transform = '';
             }
