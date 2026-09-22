@@ -454,19 +454,10 @@ public class AdyoZoneView extends FrameLayout {
 
         } else if (currentPlacement.getCreativeType() == Placement.CREATIVE_TYPE_TAG) {
 
-            // AC5 (COM-294): fit the creative to the slot only when it needs <= 2x. A creative
-            // small enough to need more than 2x is left at its natural size (mirrors the image
-            // path's MAX_UPSCALE=2.0 guard) rather than being blown up blurry. Real banner tags
-            // (320/350px in a ~328dp slot) always fit, so this only guards the tiny-creative case.
-            int creativeWidthDp = currentPlacement.getWidth();
-            boolean fillTag = creativeWidthDp > 0 && width > 0
-                    && ((double) width / (double) creativeWidthDp) <= 2.0;
-            String tagViewport = fillTag ? ("width=" + creativeWidthDp) : "initial-scale=1.0";
-
             String url = "<!DOCTYPE html>" +
                     "<html>" +
                     "<head>" +
-                    "<meta name=\"viewport\" content=\"" + tagViewport + "\"/>" +
+                    "<meta name=\"viewport\" content=\"width=" + currentPlacement.getWidth() + "\"/>" +
                     "<meta charset=\"UTF-8\">" +
                     "<style type=\"text/css\">" +
                     "html{margin:0; padding:0; height:100%}" +
@@ -477,11 +468,9 @@ public class AdyoZoneView extends FrameLayout {
                     currentPlacement.getCreativeHtml() +
                     "</body></html>";
 
-            // Fit the (creative-width) viewport to the slot only when filling; a >2x creative
-            // renders at natural size (no wide-viewport fit) so it is not upscaled past 2x.
-            webView.setInitialScale(0);
-            webView.getSettings().setLoadWithOverviewMode(fillTag);
-            webView.getSettings().setUseWideViewPort(fillTag);
+            webView.setInitialScale(0); // let the WebView fit the (creative-width) viewport to the slot
+            webView.getSettings().setLoadWithOverviewMode(true);
+            webView.getSettings().setUseWideViewPort(true);
             webView.setVerticalScrollBarEnabled(false);
             CookieManager.getInstance().setAcceptThirdPartyCookies(webView, true);
             webView.getSettings().setJavaScriptEnabled(true);
