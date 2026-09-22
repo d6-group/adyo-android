@@ -454,30 +454,26 @@ public class AdyoZoneView extends FrameLayout {
 
         } else if (currentPlacement.getCreativeType() == Placement.CREATIVE_TYPE_TAG) {
 
-            //Get the aspect ratio of the webview
-            double ratio = width/(height * 1.0);
-            double calHeight = currentPlacement.getWidth() / ratio;
-
-            String url =  "<!DOCTYPE html>" +
-                    "<html class=\"main\">" +
+            String url = "<!DOCTYPE html>" +
+                    "<html>" +
                     "<head>" +
-                    "<meta name=\"viewport\" content=\"initial-scale=" + 1.0 + "\"/>" +
+                    "<meta name=\"viewport\" content=\"initial-scale=1.0\"/>" +
                     "<meta charset=\"UTF-8\">" +
                     "<style type=\"text/css\">" +
-                    "html.main {margin:0; padding:0; height:" + height +"px;}" +
-                    "body { margin: 0; padding: 0; height:" + height +"px;}" +
-                    ".outer-div {position: relative;" +
-                    "height:" +  calHeight  + "px; width:100%;" +
+                    "html{margin:0; padding:0; height:100%}" +
+                    "body{background:none; margin:0; padding:0; height:100%}" +
                     "</style>" +
                     "</head>" +
-                    "<body>" +
-                    "<div class=\"outer-div\">" +
+                    "<body id=\"page\">" +
                     currentPlacement.getCreativeHtml() +
-                    "</div>" +
                     "</body></html>";
 
-            webView.setInitialScale(1);
-            webView.getSettings().setLoadWithOverviewMode(true);
+            int creativeWidthDp = currentPlacement.getWidth();
+            int tagScalePercent = (creativeWidthDp > 0 && width > 0)
+                    ? Math.max(1, (int) Math.round(width * 100.0 / creativeWidthDp))
+                    : 100;
+            webView.setInitialScale(tagScalePercent);
+            webView.getSettings().setLoadWithOverviewMode(false);
             webView.getSettings().setUseWideViewPort(true);
             webView.setVerticalScrollBarEnabled(false);
             CookieManager.getInstance().setAcceptThirdPartyCookies(webView, true);
