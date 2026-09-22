@@ -32,6 +32,8 @@ public class AdyoCreativeScalingScriptTest {
             "function elem(w,h){return {offsetWidth:w,offsetHeight:h,style:{}};}\n" +
             "var __images=" + imagesJs + ";\n" +
             "var __iframes=" + iframesJs + ";\n" +
+            "for(var _i=0;_i<__images.length;_i++){__images[_i].tagName='IMG';}\n" +
+            "for(var _j=0;_j<__iframes.length;_j++){__iframes[_j].tagName='IFRAME';}\n" +
             "var document={__h:{}," +
             "  documentElement:{style:{},appendChild:function(){}}," +
             "  createElement:function(t){return {textContent:'',style:{}};}," +
@@ -84,10 +86,11 @@ public class AdyoCreativeScalingScriptTest {
     }
 
     @Test
-    public void tagCreativeInIframe_isSelectedAndScaled() throws Exception {
-        // No image; largest iframe is the creative. 440 / 300 = 1.4667.
+    public void tagCreativeInIframe_isRevealedButNotScaled() throws Exception {
+        // A tag/iframe creative is selected but NOT scaled: restyling/transforming it blanks
+        // the creative on the Android WebView, so it is left at its natural layout.
         String t = runFit(440, "[]", "[elem(300,50)]");
-        assertEquals("scale(1.4667)", t);
+        assertFalse(t.startsWith("scale("));
     }
 
     @Test

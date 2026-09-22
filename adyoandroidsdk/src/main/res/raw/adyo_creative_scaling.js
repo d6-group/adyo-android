@@ -17,10 +17,12 @@
     // The layout the scaled creative needs: no margins to offset it, no scrollbars from
     // the overhang, and centred so the transform grows it evenly.
     //
-    // Applied only once a creative is found that actually needs upscaling. Laying it on
-    // every document broke the ones that didn't: an AMP creative controls its own body,
-    // and `display:flex` with `height:100%` on a 56pt viewport left the slot blank — for
-    // no gain, since a creative already at slot width is never transformed anyway.
+    // Applied only once an IMAGE creative is found that actually needs upscaling. It is never
+    // applied for a tag/iframe creative: on the Android WebView, restyling a tag creative's
+    // host document (`display:flex` + `height:100%`) or transforming its iframe renders the
+    // creative blank — the SDK loads it, an impression is recorded, but nothing is visible.
+    // (iOS/WebKit tolerates it; Android's WebView does not.) So a tag creative is revealed and
+    // left exactly as the SDK laid it out.
     var layoutStyle = null;
 
     function applyFittingLayout() {
@@ -41,8 +43,7 @@
     // The creative is the largest image *or iframe* by rendered area. Adyo serves both:
     // a plain image creative, and a `tag` creative that renders inside an iframe. An ad
     // tag builds several iframes, most of them 0x0 or 1x1 housekeeping, so picking the
-    // largest finds the real one. Transforming the iframe element is fine from out here —
-    // we're scaling the element, not reaching into its document.
+    // largest finds the real one.
     function creative() {
         var best = null, bestArea = 0;
         function consider(list) {
@@ -82,19 +83,21 @@
             return;
         }
 
-        var scale = window.innerWidth / el.offsetWidth;
-        var applied = scale > 1.01 && scale <= MAX_UPSCALE;
-
-        if (applied) {
-            applyFittingLayout();
-            el.style.transformOrigin = 'center center';
-            el.style.transform = 'scale(' + scale.toFixed(4) + ')';
-        } else {
-            // Already filling it, or too few pixels to survive being blown up: a centred
-            // small creative beats a blurry full-width one. Nothing is applied at all, so
-            // the creative is left exactly as its author laid it out.
-            removeFittingLayout();
-            el.style.transform = '';
+        // Only plain <img> creatives are scaled. Scaling a tag/iframe creative — restyling its
+        // host body or transforming the iframe — blanks it on the Android WebView (see the note
+        // on `applyFittingLayout`). A tag creative is left untouched and simply revealed.
+        if (el.tagName === 'IMG') {
+            var scale = window.innerWidth / el.offsetWidth;
+            if (scale > 1.01 && scale <= MAX_UPSCALE) {
+                applyFittingLayout();
+                el.style.transformOrigin = 'center center';
+                el.style.transform = 'scale(' + scale.toFixed(4) + ')';
+            } else {
+                // Already filling it, or too few pixels to survive being blown up: a centred
+                // small creative beats a blurry full-width one.
+                removeFittingLayout();
+                el.style.transform = '';
+            }
         }
 
         settled = true;
